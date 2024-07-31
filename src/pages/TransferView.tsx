@@ -6,6 +6,7 @@ import { CoinBalance } from '../components/CoinBalance'
 import { ERC20_ADDRESS } from '../constants'
 import { Header } from '../components/Header'
 import { QRModal } from '../components/QRModal'
+import { LocalModal } from '../components/LocalModal'
 import { toErrorMessage } from '../utils/error'
 
 function getNumber(text: string) {
@@ -23,6 +24,7 @@ const TransferView = () => {
   const amount = getNumber(amountText)
 
   const [isQROpen, setIsQROpen] = React.useState(false)
+  const [isLocalOpen, setIsLocalOpen] = React.useState(false)
 
   const [isCreatingMessageLoading, setIsCreatingMessageLoading] =
     useState(false)
@@ -89,9 +91,16 @@ const TransferView = () => {
     transferByLink
   ])
 
+  const isShareAvailable = !!navigator.share && navigator.canShare()
+
   const onSendByShare = useCallback(async () => {
     const textMessage = `${recipientLink}`
 
+    if(!isShareAvailable) {
+      setIsLocalOpen(true)
+      return
+    }
+    
     try {
       await navigator.share({
         text: textMessage
@@ -173,6 +182,16 @@ const TransferView = () => {
                 isOpen={isQROpen}
                 onRequestClose={() => {
                   setIsQROpen(false)
+                }}
+                url={recipientLink}
+              />
+            ) : null}
+
+            {recipientLink.length > 0 ? (
+              <LocalModal
+                isOpen={isLocalOpen}
+                onRequestClose={() => {
+                  setIsLocalOpen(false)
                 }}
                 url={recipientLink}
               />
