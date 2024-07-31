@@ -2,6 +2,9 @@ import React, { useCallback } from 'react'
 import {usePrex} from '@prex0/prex-react'
 import { PrimaryButton } from '../components/common'
 import RegisterWallet from '../components/RegisterWallet'
+import {
+  useNavigate
+} from "react-router-dom";
 
 enum Status {
   NotReceived,
@@ -12,6 +15,7 @@ enum Status {
 const MintView = () => {
   const [status, setStatus] = React.useState<Status>(Status.NotReceived)
   const { user, mint } = usePrex()
+  const navigate = useNavigate()
 
   const onReceive = useCallback(async () => {
     if (!user) {
@@ -23,6 +27,10 @@ const MintView = () => {
     await mint(user.address, 100n)
 
     setStatus(Status.Received)
+
+    setTimeout(() => {
+      navigate('/')
+    }, 100)
   }, [setStatus, user, mint])
 
   return (
