@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback } from 'react'
 import {usePrex} from '@prex0/prex-react'
 import { PrimaryButton, SubButton } from './common/Button'
 import { LoadingIndicator, LoadingIndicatorDark } from './common/LoadingIndicator'
@@ -89,8 +89,6 @@ const OnBoardingPasskey = ({ platform }: { platform: PlatformOS }) => {
 
 const RegisterWallet = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated, isLoading } = usePrex()
-
-  const [isCreatingWallet, setIsCreatingWallet] = useState<boolean>(false)
 
   if (isLoading) {
     return (

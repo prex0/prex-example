@@ -7,6 +7,7 @@ import { Layout } from "./pages/Layout";
 import BalanceView from './pages/BalanceView'
 import MintView from './pages/MintView'
 import TransferView from './pages/TransferView'
+import TransferPendingView from './pages/TransferPendingView'
 import ReceiveView from './pages/ReceiveView'
 import ProfileView from './pages/ProfileView'
 import HistoryView from './pages/HistoryView'
@@ -24,6 +25,7 @@ export const appRoute = createBrowserRouter(
         <Route path="/" element={<BalanceView />} />
         <Route path="/mint" element={<MintView />} />
         <Route path="/transfer" element={<TransferView />} />
+        <Route path="/pending" element={<TransferPendingView />} />
         <Route path="/receive" element={<ReceiveView />} />
         <Route path="/profile" element={<ProfileView />} />
         <Route path="/history" element={<HistoryView />} />
