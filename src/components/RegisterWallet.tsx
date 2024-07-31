@@ -90,6 +90,8 @@ const OnBoardingPasskey = ({ platform }: { platform: PlatformOS }) => {
 const RegisterWallet = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated, isLoading } = usePrex()
 
+  const [isCreatingWallet, setIsCreatingWallet] = useState<boolean>(false)
+
   if (isLoading) {
     return (
       <div className="w-full h-full flex justify-center items-center">
@@ -104,7 +106,17 @@ const RegisterWallet = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <div className="w-full h-full p-4">
-      <RegisterWalletInner />
+      {location.pathname === '/receive' ? (
+        <div>
+          <div>
+            コインが届いています。
+            ウォレットを登録して、コインを受け取りましょう。
+          </div>
+          <RegisterWalletInner /> 
+        </div>
+      ) : (
+        <RegisterWalletInner />
+      )}
     </div>
   )
 }
