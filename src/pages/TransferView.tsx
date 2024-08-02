@@ -60,10 +60,10 @@ const TransferView = () => {
     const transferResponse = await transferByLink(
       ERC20_ADDRESS,
       BigInt(amount),
+      expiration,
       {
         message
       },
-      expiration
     )
 
     if (transferResponse) {
