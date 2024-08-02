@@ -6,9 +6,9 @@ import { Header } from '../components/Header'
 const MAX_NICKNAME_LENGTH = 32
 
 const ProfileView = () => {
-  const { user } = usePrex()
+  const { wallet } = usePrex()
 
-  console.log(user)
+  console.log(wallet)
 
   return (
     <div>
@@ -16,8 +16,8 @@ const ProfileView = () => {
       <div className="m-2 flex justify-center items-center">
         <div className="text-base space-y-3">
           <div className="fixed bottom-8 z-999 left-0 w-full p-2">
-            {user ? (
-              <NickNameForm nickname={user.nickname} />
+            {wallet ? (
+              <NickNameForm nickname={wallet.nickname} />
             ) : (
               <LoadingIndicatorDark />
             )}

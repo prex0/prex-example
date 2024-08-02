@@ -14,24 +14,24 @@ enum Status {
 
 const MintView = () => {
   const [status, setStatus] = React.useState<Status>(Status.NotReceived)
-  const { user, mint } = usePrex()
+  const { wallet, mint } = usePrex()
   const navigate = useNavigate()
 
   const onReceive = useCallback(async () => {
-    if (!user) {
+    if (!wallet) {
       throw new Error('Failed to generate key')
     }
 
     setStatus(Status.Processing)
 
-    await mint(user.address, 100n)
+    await mint(wallet.address, 100n)
 
     setStatus(Status.Received)
 
     setTimeout(() => {
       navigate('/')
     }, 100)
-  }, [setStatus, user, mint])
+  }, [setStatus, wallet, mint])
 
   return (
     <div className="m-2 flex justify-center items-center">

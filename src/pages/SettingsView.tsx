@@ -4,7 +4,7 @@ import { Header } from '../components/Header'
 import { PrimaryButton } from '../components/common'
 
 const SettingsView = () => {
-  const { user, recoverWallet } = usePrex()
+  const { wallet, recoverWallet } = usePrex()
 
   const onRecoverWallet = useCallback(() => {
     recoverWallet()
@@ -17,7 +17,7 @@ const SettingsView = () => {
         <div className="mt-14 mx-4 text-sm space-y-3 text-zinc-800">
           <div>
             <div>現在のアドレス：</div>
-            <div>{user ? user.address : null}</div>
+            <div>{wallet ? wallet.address : null}</div>
           </div>
           <div>
             パスキーを誤って複数登録してしまった場合には、こちらでウォレットを切り替えてください。

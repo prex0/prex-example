@@ -5,14 +5,14 @@ import { LoadingIndicator, SubButton } from '../components/common'
 import { Header } from '../components/Header'
 
 const DirectReceiveView = () => {
-  const { user } = usePrex()
+  const { wallet } = usePrex()
 
   const [url, setUrl] = useState('')
   const [src, setSrc] = useState<string | null>(null)
 
   useEffect(() => {
-    if (user) {
-      const url = `${location.origin}/dtransfer?r=${user.address}`
+    if (wallet) {
+      const url = `${location.origin}/dtransfer?r=${wallet.address}`
 
       setUrl(url)
 
@@ -20,7 +20,7 @@ const DirectReceiveView = () => {
         setSrc(image)
       })
     }
-  }, [user, setSrc])
+  }, [wallet, setSrc])
 
   const onSendByShare = useCallback(async () => {
     await navigator.share({

@@ -30,7 +30,7 @@ const DirectTransferView = () => {
   const [amountText, setAmount] = React.useState<string>('0')
   const amount = getNumber(amountText)
 
-  const { user, balance, loadBalance,nicknames, error, transfer, loadNicknames } = usePrex()
+  const { wallet, balance, loadBalance,nicknames, error, transfer, loadNicknames } = usePrex()
 
   const recipient = params.get('r')
 
@@ -41,10 +41,10 @@ const DirectTransferView = () => {
   }, [recipient, loadNicknames])
 
   useEffect(() => {
-    if (user) {
+    if (wallet) {
       loadBalance(ERC20_ADDRESS)
     }
-  }, [user])
+  }, [wallet])
 
   const onReceive = useCallback(async () => {
     if (!recipient) {

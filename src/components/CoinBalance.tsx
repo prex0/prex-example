@@ -11,7 +11,7 @@ export const CoinBalance = ({
   erc20Address: Address
   unit: string
 }) => {
-  const {user, balance, loadBalance} = usePrex()
+  const {wallet, balance, loadBalance} = usePrex()
 
   useEffect(() => {
     loadBalance(erc20Address)
@@ -25,7 +25,7 @@ export const CoinBalance = ({
         <div className="text-base text-zinc-700 flex justify-center">
           コイン保有数
         </div>
-        {user && balance[erc20Address] !== undefined ? (
+        {wallet && balance[erc20Address] !== undefined ? (
           <div className="text-xl font-bold text-zinc-900 flex justify-center">
             {Number(balance[erc20Address])} {unit}
           </div>

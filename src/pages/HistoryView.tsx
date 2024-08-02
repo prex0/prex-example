@@ -148,7 +148,7 @@ const OnetimeLockHistoryContent = () => {
 }
 
 const HistoryView = () => {
-  const { user, loadHistory, loadOnetimeLockHistory } = usePrex()
+  const { wallet, loadHistory, loadOnetimeLockHistory } = usePrex()
 
   const [tab, setTab] = useState<'history' | 'onetime'>('history')
 
@@ -187,9 +187,9 @@ const HistoryView = () => {
             </div>
           </div>
           <div className="text-base space-y-3">
-            {user ? (
+            {wallet ? (
               tab === 'history' ? (
-                <HistoryContent me={user.address} />
+                <HistoryContent me={wallet.address} />
               ) : (
                 <OnetimeLockHistoryContent />
               )
