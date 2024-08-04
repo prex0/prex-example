@@ -124,7 +124,7 @@ const RegisterWalletInner = () => {
     usePrex()
 
   const onRegister = useCallback(async () => {
-    await createWallet('Prex Sample App')
+    await createWallet()
   }, [createWallet])
 
   const onRecover = useCallback(async () => {

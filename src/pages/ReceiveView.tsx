@@ -32,7 +32,6 @@ const ReceiveView = () => {
   const {
     nicknames,
     error,
-    loadNicknames,
     getLinkTransfer,
     receiveLinkTransfer
   } = usePrex()
@@ -59,8 +58,7 @@ const ReceiveView = () => {
     id,
     getLinkTransfer,
     setLinkTransfer,
-    setAmount,
-    loadNicknames
+    setAmount
   ])
 
   const onReceive = useCallback(async () => {
