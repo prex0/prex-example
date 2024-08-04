@@ -42,8 +42,8 @@ const ReceiveView = () => {
   }
 
   useEffect(() => {
-    if (id) {
-      getLinkTransfer(id).then(message => {
+    if (id && secret) {
+      getLinkTransfer(id, secret).then(message => {
         if (message === null) {
           setIsNotFound(true)
           return
@@ -53,8 +53,6 @@ const ReceiveView = () => {
         setMessage(message.message.messageBody.message)
 
         setAmount(message.request.amount)
-
-        loadNicknames([message.request.sender])
       })
     }
   }, [
