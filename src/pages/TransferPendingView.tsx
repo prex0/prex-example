@@ -21,7 +21,7 @@ const TransferPendingView = () => {
   const id = params.get('id')
   const secret = params.get('s')
 
-  const { error, loadNicknames, getLinkTransfer } = usePrex()
+  const { error, getLinkTransfer } = usePrex()
 
   const recipientLink =
     !!id && !!secret
@@ -33,8 +33,8 @@ const TransferPendingView = () => {
       : ''
 
   useEffect(() => {
-    if (id) {
-      getLinkTransfer(id).then(message => {
+    if (id && secret) {
+      getLinkTransfer(id, secret).then(message => {
         if (message === null) {
           setIsNotFound(true)
           return
@@ -44,11 +44,9 @@ const TransferPendingView = () => {
         setMessage(message.message.messageBody.message)
 
         setAmount(message.request.amount)
-
-        loadNicknames([message.request.sender])
       })
     }
-  }, [id, getLinkTransfer, setMessage, setAmount, loadNicknames])
+  }, [id, getLinkTransfer, setMessage, setAmount])
 
   const isShareAvailable = !!navigator.share && navigator.canShare()
 

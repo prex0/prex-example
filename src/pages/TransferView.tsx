@@ -91,21 +91,15 @@ const TransferView = () => {
     transferByLink
   ])
 
-  const isShareAvailable = !!navigator.share && navigator.canShare()
-
   const onSendByShare = useCallback(async () => {
     const textMessage = `${recipientLink}`
-
-    if(!isShareAvailable) {
-      setIsLocalOpen(true)
-      return
-    }
     
     try {
       await navigator.share({
         text: textMessage
       })
     } catch (e) {
+      setIsLocalOpen(true)
       console.error(e)
     }
   }, [recipientLink])
