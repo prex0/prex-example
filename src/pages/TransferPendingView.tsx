@@ -48,8 +48,6 @@ const TransferPendingView = () => {
     }
   }, [id, getLinkTransfer, setMessage, setAmount])
 
-  const isShareAvailable = !!navigator.share && navigator.canShare()
-
   const onSendByShare = useCallback(async () => {
     const textMessage = `${recipientLink}`
 
@@ -155,7 +153,7 @@ const TransferPendingView = () => {
                 >
                   QRを表示する
                 </PrimaryButton>
-                <PrimaryButton onClick={onSendByShare} disabled={!isShareAvailable}>
+                <PrimaryButton onClick={onSendByShare}>
                   他のツール
                 </PrimaryButton>
               </div>
