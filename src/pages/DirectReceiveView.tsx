@@ -30,7 +30,7 @@ const DirectReceiveView = () => {
 
   return (
     <div>
-      <Header title="受け取り" />
+      <Header title="マイコード" />
       <div className="m-2 p-3 flex justify-center items-center">
         <div className="mt-0">
           <div className="flex flex-col justify-center space-y-3">

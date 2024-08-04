@@ -77,7 +77,7 @@ const BalanceView = () => {
               <ActionIcon
                 icon={<AiFillMoneyCollect className="w-14 h-14" />}
                 link="dreceive"
-                title="受け取る"
+                title="マイコード"
               />
             </div>
           </div>
