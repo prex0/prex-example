@@ -7,7 +7,6 @@ import { PrimaryButton, LoadingIndicatorDark } from '../components/common'
 import { QRLink } from '../components/QRLink'
 import { Header } from '../components/Header'
 import { RWebShare } from "react-web-share";
-import { AiFillCopy } from 'react-icons/ai'
 import { Clipboard } from '../components/common/Clipboard'
 
 const TransferPendingView = () => {
