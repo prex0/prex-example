@@ -186,7 +186,7 @@ const HistoryView = () => {
               </div>
             </div>
           </div>
-          <div className="text-base space-y-3">
+          <div className="mt-4 text-base space-y-3">
             {wallet ? (
               tab === 'history' ? (
                 <HistoryContent me={wallet.address} />

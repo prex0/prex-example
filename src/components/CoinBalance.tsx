@@ -20,7 +20,7 @@ export const CoinBalance = ({
   const hasZero = balance[erc20Address] === undefined ? false : balance[erc20Address] === 0n
 
   return (
-    <div className="mt-8 w-48 p-4 shadow-lg rounded-xl border-primary border-[1px]">
+    <div className="mt-8 w-48 p-4 shadow-lg rounded-xl border-primary border-[1px] bg-white">
       <div>
         <div className="text-base text-zinc-700 flex justify-center">
           コイン保有数

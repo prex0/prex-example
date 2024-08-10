@@ -6,8 +6,8 @@ import { CoinBalance } from '../components/CoinBalance'
 import { ERC20_ADDRESS } from '../constants'
 import { Header } from '../components/Header'
 import { QRModal } from '../components/QRModal'
-import { LocalModal } from '../components/LocalModal'
 import { toErrorMessage } from '../utils/error'
+import { RWebShare } from "react-web-share";
 
 function getNumber(text: string) {
   const num = parseInt(text)
@@ -24,7 +24,6 @@ const TransferView = () => {
   const amount = getNumber(amountText)
 
   const [isQROpen, setIsQROpen] = React.useState(false)
-  const [isLocalOpen, setIsLocalOpen] = React.useState(false)
 
   const [isCreatingMessageLoading, setIsCreatingMessageLoading] =
     useState(false)
@@ -55,7 +54,7 @@ const TransferView = () => {
       }
     }
 
-    const expiration = Math.floor(new Date('2024-08-31').getTime() / 1000)
+    const expiration = Math.floor(new Date().getTime() / 1000) + 60 * 60 * 24
 
     const transferResponse = await transferByLink(
       ERC20_ADDRESS,
@@ -90,19 +89,6 @@ const TransferView = () => {
     setRecipientLink,
     transferByLink
   ])
-
-  const onSendByShare = useCallback(async () => {
-    const textMessage = `${recipientLink}`
-    
-    try {
-      await navigator.share({
-        text: textMessage
-      })
-    } catch (e) {
-      setIsLocalOpen(true)
-      console.error(e)
-    }
-  }, [recipientLink])
 
   if (balance[ERC20_ADDRESS] === undefined) {
     return (
@@ -180,16 +166,6 @@ const TransferView = () => {
                 url={recipientLink}
               />
             ) : null}
-
-            {recipientLink.length > 0 ? (
-              <LocalModal
-                isOpen={isLocalOpen}
-                onRequestClose={() => {
-                  setIsLocalOpen(false)
-                }}
-                url={recipientLink}
-              />
-            ) : null}
           </div>
 
           <div className="fixed bottom-10 z-999 left-0 w-full p-4 space-y-4">
@@ -210,9 +186,11 @@ const TransferView = () => {
                 >
                   QRを表示する
                 </PrimaryButton>
-                <PrimaryButton onClick={onSendByShare}>
-                  他のツール
-                </PrimaryButton>
+                <RWebShare data={{url:recipientLink}}>
+                  <PrimaryButton>
+                    他のツール
+                  </PrimaryButton>
+                </RWebShare>
               </div>
             ) : (
               <PrimaryButton

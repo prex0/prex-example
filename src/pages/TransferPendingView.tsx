@@ -1,11 +1,14 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {usePrex} from '@prex0/prex-react'
 import { GetLinkTransferResponse, RequestStatus } from '@prex0/prex-client'
 import Linkify from 'linkify-react'
 import { Link } from 'react-router-dom'
 import { PrimaryButton, LoadingIndicatorDark } from '../components/common'
-import { QRModal } from '../components/QRModal'
+import { QRLink } from '../components/QRLink'
 import { Header } from '../components/Header'
+import { RWebShare } from "react-web-share";
+import { AiFillCopy } from 'react-icons/ai'
+import { Clipboard } from '../components/common/Clipboard'
 
 const TransferPendingView = () => {
   const params = new URLSearchParams(window.location.search)
@@ -13,7 +16,6 @@ const TransferPendingView = () => {
     useState<GetLinkTransferResponse | null>(null)
 
   const [message, setMessage] = useState('')
-  const [isQROpen, setIsQROpen] = React.useState(false)
 
   const [amount, setAmount] = React.useState<bigint | undefined>(undefined)
   const [isNotFound, setIsNotFound] = React.useState(false)
@@ -47,18 +49,6 @@ const TransferPendingView = () => {
       })
     }
   }, [id, getLinkTransfer, setMessage, setAmount])
-
-  const onSendByShare = useCallback(async () => {
-    const textMessage = `${recipientLink}`
-
-    try {
-      await navigator.share({
-        text: textMessage
-      })
-    } catch (e) {
-      console.error(e)
-    }
-  }, [recipientLink])
 
   if (recipientLink === '' || isNotFound) {
     return (
@@ -103,17 +93,33 @@ const TransferPendingView = () => {
   return (
     <div>
       <Header title="リンク送付中" returnPath="/history" />
-      <div className="m-2 p-2 flex justify-center items-center">
+      <div className="p-4 flex justify-center items-center">
         <div className="mt-8">
           <div className="text-base space-y-3">
-            {amount ? (
-              <div>{Number(amount)} DemoCoinを送付しています</div>
-            ) : (
-              <div>読み込み中です</div>
-            )}
+
+            <div className='flex justify-center'>
+              {amount ? (
+                <div>{Number(amount)} DemoCoinを送付しています</div>
+              ) : (
+                <div>読み込み中です</div>
+              )}
+            </div>
+
+            <div className="p-4 rounded-lg bg-white">
+              <div className='flex justify-center'>
+                {recipientLink.length > 0 ? (
+                  <QRLink
+                    url={recipientLink}
+                  />
+                ) : null}
+              </div>
+              <div className='flex justify-center text-xs text-center'>
+              こちらの２次元コードを、<br/>相手に読み取ってもらってください。
+              </div>
+            </div>
 
             <div className="flex justify-center">
-              <div className="mt-8 ">
+              <div className="mt-4 ">
                 <div className="text-sm text-gray">メッセージ</div>
                 <div className="text-base text-black">
                   <Linkify
@@ -128,34 +134,25 @@ const TransferPendingView = () => {
               </div>
             </div>
 
-            <div className="pb-24 flex justify-start items-center">
-              {recipientLink.length > 0 ? (
-                <QRModal
-                  isOpen={isQROpen}
-                  onRequestClose={() => {
-                    setIsQROpen(false)
-                  }}
-                  url={recipientLink}
-                />
-              ) : null}
-            </div>
 
-            <div className="fixed bottom-10 z-999 left-0 w-full p-2">
+            <div className="fixed bottom-10 z-999 left-0 w-full px-8 py-4">
               <div className="text-xs text-red-700">
                 {error ? 'サーバの調子が悪いようです' : null}
               </div>
 
-              <div className="flex justify-between space-x-1">
-                <PrimaryButton
-                  onClick={() => {
-                    setIsQROpen(true)
-                  }}
-                >
-                  QRを表示する
-                </PrimaryButton>
-                <PrimaryButton onClick={onSendByShare}>
-                  他のツール
-                </PrimaryButton>
+              <div className="flex flex-col justify-between space-y-1">
+                <div className='h-10'>
+                <RWebShare data={{url: recipientLink}}>
+                  <PrimaryButton>
+                    リンクをシェアする
+                  </PrimaryButton>
+                </RWebShare>
+                </div>
+                <Clipboard value={recipientLink}>
+                  <div>
+                    リンクをコピーする
+                  </div>
+                </Clipboard>
               </div>
             </div>
           </div>

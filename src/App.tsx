@@ -3,7 +3,7 @@ import { appRoute } from "./AppRoute";
 
 const App = () => {
  
-  return (<div className="text-zinc-800">
+  return (<div className="bg-zinc-50 text-zinc-800">
     <RouterProvider router={appRoute}/>
   </div>
   )

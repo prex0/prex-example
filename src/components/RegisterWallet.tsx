@@ -165,7 +165,7 @@ const RegisterWalletInner = () => {
           </div>
         </div>
       </div>
-      <div className="fixed bottom-0 pb-6 z-999 left-0 w-full p-4 space-y-2 bg-white">
+      <div className="fixed bottom-0 pb-6 z-999 left-0 w-full p-4 space-y-2 bg-zinc-50">
         <div className="text-xs text-red-700">
           {error ? toErrorMessage(error) : null}
         </div>

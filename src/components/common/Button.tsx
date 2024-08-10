@@ -15,7 +15,7 @@ export const PrimaryButton = ({
     <button
       disabled={disabled}
       onClick={onClick}
-      className={`w-full h-12 bg-zinc-900 disabled:bg-zinc-500 hover:bg-zinc-600 text-white text-${size} font-bold px-4 py-2 rounded-md`}
+      className={`w-full h-full bg-zinc-900 disabled:bg-zinc-500 hover:bg-zinc-600 text-white text-${size} font-bold px-4 py-2 rounded-md`}
     >
       {children}
     </button>
