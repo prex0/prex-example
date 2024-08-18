@@ -141,7 +141,7 @@ const RegisterWalletInner = () => {
     )
   }
 
-  if (!isPasskeyAvailable || (platformOs === PlatformOS.Other)) {
+  if (!isPasskeyAvailable) {
     return (
       <div className="w-full h-full flex justify-center items-center">
         <div className="p-2 text-zinc-600 text-sm">

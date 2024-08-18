@@ -12,7 +12,6 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
       <PrexProvider
         chainId={CHAIN_ID}
-        appName="Prex Sample App"
         ruleId={Number(import.meta.env.VITE_RULE_ID)}
         apiKey={import.meta.env.VITE_APP_SIG}
         >
