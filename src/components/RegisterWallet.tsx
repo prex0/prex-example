@@ -123,6 +123,8 @@ const RegisterWalletInner = () => {
   const { error, isPasskeyAvailable, isLoading, createWallet, recoverWallet } =
     usePrex()
 
+    console.log(error)
+
   const onRegister = useCallback(async () => {
     await createWallet()
   }, [createWallet])
