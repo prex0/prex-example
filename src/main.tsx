@@ -14,6 +14,8 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         chainId={CHAIN_ID}
         ruleId={Number(import.meta.env.VITE_RULE_ID)}
         apiKey={import.meta.env.VITE_APP_SIG}
+        maxFeePerGas='0.23'
+        maxPriorityFeePerGas='0.11'
         >
         <App />
       </PrexProvider>

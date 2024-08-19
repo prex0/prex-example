@@ -30,7 +30,7 @@ const DirectTransferView = () => {
   const [amountText, setAmount] = React.useState<string>('0')
   const amount = getNumber(amountText)
 
-  const { wallet, balance, loadBalance,nicknames, error, transfer, loadNicknames } = usePrex()
+  const { wallet, balance, allowance, loadBalance, nicknames, error, transfer, approve, loadNicknames } = usePrex()
 
   const recipient = params.get('r')
 
@@ -56,6 +56,16 @@ const DirectTransferView = () => {
     }
 
     setStatus(Status.Processing)
+
+    if (allowance[ERC20_ADDRESS] < 1000n) {
+      try {
+        await approve(ERC20_ADDRESS)
+      } catch (e) {
+        console.error(e)
+        setStatus(Status.NotReceived)
+        return
+      }
+    }
 
     await transfer(ERC20_ADDRESS, recipient as Address, BigInt(amount))
 
