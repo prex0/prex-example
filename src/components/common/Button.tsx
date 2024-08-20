@@ -35,7 +35,7 @@ export const SubButton = ({
     <button
       disabled={disabled}
       onClick={onClick}
-      className="w-full h-12 border-zinc-950/10 border border-[1px] text-base font-bold text-zinc-900 px-4 py-2 rounded-md"
+      className="w-full h-full border-zinc-950/10 border border-[1px] text-base font-bold text-zinc-900 px-4 py-2 rounded-md"
     >
       {children}
     </button>

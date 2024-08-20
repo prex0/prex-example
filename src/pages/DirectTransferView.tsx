@@ -1,10 +1,15 @@
 import React, { useCallback, useEffect } from 'react'
 import { Address } from 'viem'
-import {usePrex, splitAddress} from '@prex0/prex-react'
+import { usePrex, splitAddress } from '@prex0/prex-react'
 import dayjs from 'dayjs'
-import { PrimaryButton, SubButton, LoadingIndicator, SubTitle } from '../components/common'
+import {
+  PrimaryButton,
+  SubButton,
+  LoadingIndicator,
+  SubTitle
+} from '../components/common'
 import { CoinBalance } from '../components/CoinBalance'
-import { ERC20_ADDRESS } from '../constants'
+import { ERC20_ADDRESS, TOKEN_NAME, UNIT_NAME } from '../constants'
 import { Header } from '../components/Header'
 
 enum Status {
@@ -30,7 +35,17 @@ const DirectTransferView = () => {
   const [amountText, setAmount] = React.useState<string>('0')
   const amount = getNumber(amountText)
 
-  const { wallet, balance, allowance, loadBalance, nicknames, error, transfer, approve, loadNicknames } = usePrex()
+  const {
+    wallet,
+    balance,
+    allowance,
+    loadBalance,
+    nicknames,
+    error,
+    transfer,
+    approve,
+    loadNicknames
+  } = usePrex()
 
   const recipient = params.get('r')
 
@@ -111,7 +126,9 @@ const DirectTransferView = () => {
               </div>
 
               <div className="flex justify-center">
-                <div className="text-center text-2xl font-bold">1 demoCoin</div>
+                <div className="text-center text-2xl font-bold">
+                  1 {UNIT_NAME}
+                </div>
               </div>
               <div className="flex justify-center">
                 <div className="w-40 p-2 rounded-2xl bg-green-700 text-white text-center text-base font-bold">
@@ -133,10 +150,10 @@ const DirectTransferView = () => {
           <div className="text-base space-y-3">
             <div>
               <div className="flex justify-center">
-                <SubTitle>demoCoinを送付します。</SubTitle>
+                <SubTitle>{TOKEN_NAME}を送付します。</SubTitle>
               </div>
             </div>
-            <CoinBalance erc20Address={ERC20_ADDRESS} unit={'demoCoin'} />
+            <CoinBalance erc20Address={ERC20_ADDRESS} unit={UNIT_NAME} />
 
             <div className="fixed bottom-10 z-999 left-0 w-full p-2">
               <div className="space-y-3">
@@ -152,7 +169,7 @@ const DirectTransferView = () => {
                     />
                   </div>
 
-                  <span className="text-black">demoCoin</span>
+                  <span className="text-black">{UNIT_NAME}</span>
                 </div>
 
                 <div className="flex justify-between space-x-1 text-sm">
@@ -191,8 +208,8 @@ const DirectTransferView = () => {
                   {isAmountZero
                     ? '数量を入力してください'
                     : isExceeded
-                    ? '残高が足りません'
-                    : null}
+                      ? '残高が足りません'
+                      : null}
                 </div>
 
                 <PrimaryButton

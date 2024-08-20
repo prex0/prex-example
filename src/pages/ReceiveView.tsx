@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { Address, Hex } from 'viem'
-import {usePrex, splitAddress} from '@prex0/prex-react'
-import {GetLinkTransferResponse, RequestStatus} from '@prex0/prex-client'
+import { usePrex, splitAddress } from '@prex0/prex-react'
+import { GetLinkTransferResponse, RequestStatus } from '@prex0/prex-client'
 import Linkify from 'linkify-react'
 import { Link } from 'react-router-dom'
 import {
@@ -9,6 +9,7 @@ import {
   LoadingIndicator,
   LoadingIndicatorDark
 } from '../components/common'
+import { UNIT_NAME } from '../constants'
 
 enum Status {
   NotReceived,
@@ -29,12 +30,7 @@ const ReceiveView = () => {
   const id = params.get('id')
   const secret = params.get('s')
 
-  const {
-    nicknames,
-    error,
-    getLinkTransfer,
-    receiveLinkTransfer
-  } = usePrex()
+  const { nicknames, error, getLinkTransfer, receiveLinkTransfer } = usePrex()
 
   const getDisplayName = (address: Address) => {
     return nicknames[address] || splitAddress(address)
@@ -54,12 +50,7 @@ const ReceiveView = () => {
         setAmount(message.request.amount)
       })
     }
-  }, [
-    id,
-    getLinkTransfer,
-    setLinkTransfer,
-    setAmount
-  ])
+  }, [id, getLinkTransfer, setLinkTransfer, setAmount])
 
   const onReceive = useCallback(async () => {
     if (!secret) {
@@ -127,8 +118,10 @@ const ReceiveView = () => {
         <div className="text-base space-y-3">
           {amount ? (
             <div>
-              {linkTransfer ? getDisplayName(linkTransfer.request.sender) + 'から' : ''}
-              {Number(amount)} demoCoin が届いています。
+              {linkTransfer
+                ? getDisplayName(linkTransfer.request.sender) + 'から'
+                : ''}
+              {Number(amount)} {UNIT_NAME} が届いています。
             </div>
           ) : (
             <div>読み込み中です</div>

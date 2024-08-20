@@ -1,6 +1,10 @@
-import { Outlet } from "react-router-dom";
-import RegisterWallet from '../components/RegisterWallet';
+import { Outlet } from 'react-router-dom'
+import RegisterWallet from '../components/RegisterWallet'
 
 export function Layout() {
-    return (<RegisterWallet><Outlet /></RegisterWallet>)
+  return (
+    <RegisterWallet>
+      <Outlet />
+    </RegisterWallet>
+  )
 }

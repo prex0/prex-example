@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import {usePrex} from '@prex0/prex-react'
+import { usePrex } from '@prex0/prex-react'
 import * as QRCode from 'qrcode'
 import { LoadingIndicator, SubButton } from '../components/common'
 import { Header } from '../components/Header'

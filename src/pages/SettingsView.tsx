@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import {usePrex} from '@prex0/prex-react'
+import { usePrex } from '@prex0/prex-react'
 import { Header } from '../components/Header'
 import { PrimaryButton } from '../components/common'
 

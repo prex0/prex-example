@@ -1,13 +1,18 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import {usePrex} from '@prex0/prex-react'
-import { PrimaryButton, SubButton, LoadingIndicator } from '../components/common'
+import { usePrex } from '@prex0/prex-react'
+import {
+  PrimaryButton,
+  SubButton,
+  LoadingIndicator
+} from '../components/common'
 import { TextInput } from '../components/common/TextInput'
 import { CoinBalance } from '../components/CoinBalance'
-import { ERC20_ADDRESS } from '../constants'
+import { ERC20_ADDRESS, UNIT_NAME } from '../constants'
 import { Header } from '../components/Header'
 import { QRModal } from '../components/QRModal'
 import { toErrorMessage } from '../utils/error'
-import { RWebShare } from "react-web-share";
+import { RWebShare } from 'react-web-share'
+import { getExpiration } from '../utils'
 
 function getNumber(text: string) {
   const num = parseInt(text)
@@ -30,16 +35,15 @@ const TransferView = () => {
 
   const [recipientLink, setRecipientLink] = useState('')
   const [message, setMessage] = useState(`コインをお送りします！`)
-  const { error, approve, transferByLink, loadBalance, allowance, balance } = usePrex()
+  const { error, approve, transferByLink, loadBalance, allowance, balance } =
+    usePrex()
 
   useEffect(() => {
     loadBalance(ERC20_ADDRESS)
   }, [loadBalance])
 
-
   const onTransfer = useCallback(async () => {
     setIsCreatingMessageLoading(true)
-
 
     if (amount === null || amount === 0) {
       throw new Error('amount must not be null')
@@ -54,19 +58,23 @@ const TransferView = () => {
       }
     }
 
-    const expiration = Math.floor(new Date().getTime() / 1000) + 60 * 60 * 24
+    // Create expiration timestamp in seconds
+    const expiration = getExpiration()
 
+    // Call Prex API to lock the amount of tokens in the smart contract
     const transferResponse = await transferByLink(
       ERC20_ADDRESS,
       BigInt(amount),
       expiration,
       {
         message
-      },
+      }
     )
 
     if (transferResponse) {
       const { id, secret } = transferResponse
+
+      // Create recipient link
       const _recipientLink = `${
         location.origin
       }/receive?openExternalBrowser=1&id=${encodeURIComponent(
@@ -81,14 +89,7 @@ const TransferView = () => {
     } else {
       setIsCreatingMessageLoading(false)
     }
-  }, [
-    amount,
-    allowance,
-    approve,
-    message,
-    setRecipientLink,
-    transferByLink
-  ])
+  }, [amount, allowance, approve, message, setRecipientLink, transferByLink])
 
   if (balance[ERC20_ADDRESS] === undefined) {
     return (
@@ -106,12 +107,14 @@ const TransferView = () => {
       <div className="p-4 flex justify-center items-center">
         <div className="text-base space-y-3">
           <div className="flex justify-center">
-            <CoinBalance erc20Address={ERC20_ADDRESS} unit={'demoCoin'} />
+            <CoinBalance erc20Address={ERC20_ADDRESS} unit={UNIT_NAME} />
           </div>
 
           <div className="mt-4 pb-32 space-y-4">
             <div className="space-y-2">
-              <div className="mt-8 text-zinc-700">送る枚数を決めてください。</div>
+              <div className="mt-8 text-zinc-700">
+                送る枚数を決めてください。
+              </div>
               <div className="flex justify-between items-center space-x-2 text-sm">
                 <div className="basis-1/4">
                   <SubButton
@@ -142,7 +145,7 @@ const TransferView = () => {
                       />
                     </div>
 
-                    <span className="text-black">demoCoin</span>
+                    <span className="text-black">{UNIT_NAME}</span>
                   </div>
                 </div>
               </div>
@@ -186,10 +189,8 @@ const TransferView = () => {
                 >
                   QRを表示する
                 </PrimaryButton>
-                <RWebShare data={{url:recipientLink}}>
-                  <PrimaryButton>
-                    他のツール
-                  </PrimaryButton>
+                <RWebShare data={{ url: recipientLink }}>
+                  <PrimaryButton>他のツール</PrimaryButton>
                 </RWebShare>
               </div>
             ) : (

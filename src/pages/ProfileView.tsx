@@ -1,6 +1,10 @@
 import React, { useCallback } from 'react'
-import {usePrex} from '@prex0/prex-react'
-import { LoadingIndicatorDark, TextInput, PrimaryButton } from '../components/common'
+import { usePrex } from '@prex0/prex-react'
+import {
+  LoadingIndicatorDark,
+  TextInput,
+  PrimaryButton
+} from '../components/common'
 import { Header } from '../components/Header'
 
 const MAX_NICKNAME_LENGTH = 32

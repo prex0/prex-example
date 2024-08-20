@@ -5,7 +5,7 @@ import {
   WalletCoinHistory,
   WalletOnetimeLockHistory
 } from '@prex0/prex-react'
-import { ERC20_ADDRESS } from '../constants'
+import { ERC20_ADDRESS, UNIT_NAME } from '../constants'
 import { getFormattedDate } from '../utils/date'
 import { LoadingIndicatorDark } from '../components/common'
 import { Header } from '../components/Header'
@@ -23,7 +23,9 @@ const HistoryItemContent = ({
       <div>
         <div className="flex justify-between">
           <div>{item.recipientDisplayName}に送りました。</div>
-          <div>{item.amount} demoCoin</div>
+          <div>
+            {item.amount} {UNIT_NAME}
+          </div>
         </div>
         <div className="flex justify-start">
           <div>
@@ -39,7 +41,9 @@ const HistoryItemContent = ({
       <div>
         <div className="flex justify-between">
           <div>{item.senderDisplayName}から受け取りました。</div>
-          <div>{item.amount} demoCoin</div>
+          <div>
+            {item.amount} {UNIT_NAME}
+          </div>
         </div>
         <div className="flex justify-start">
           <div>
@@ -70,7 +74,9 @@ const OnetimeLockHistoryItemContent = ({
       <div>
         <div className="flex justify-between">
           <div>{item.recipientDisplayName}に送りました。</div>
-          <div>{item.amount} demoCoin</div>
+          <div>
+            {item.amount} {UNIT_NAME}
+          </div>
         </div>
         <div className="flex justify-start">
           <div>
@@ -87,17 +93,16 @@ const OnetimeLockHistoryItemContent = ({
         <div className="flex justify-between">
           <div>
             {recipientLink ? (
-              <Link
-                to={recipientLink}
-                className="text-blue-700 underline"
-              >
+              <Link to={recipientLink} className="text-blue-700 underline">
                 送付しています
               </Link>
             ) : (
               '送付しています'
             )}
           </div>
-          <div>{item.amount} demoCoin</div>
+          <div>
+            {item.amount} {UNIT_NAME}
+          </div>
         </div>
         <div className="flex justify-start">
           <div>

@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from 'react'
 import CytoscapeComponent from 'react-cytoscapejs'
-import {usePrex} from '@prex0/prex-react'
+import { usePrex } from '@prex0/prex-react'
 import { LoadingIndicatorDark } from '../components/common'
 import { ERC20_ADDRESS } from '../constants'
 

@@ -1,15 +1,15 @@
 import React from 'react'
-import { Link } from "react-router-dom"
+import { Link } from 'react-router-dom'
 import {
   AiFillMoneyCollect,
   AiOutlineHistory,
   AiOutlineScan,
   AiOutlineSend,
   AiOutlineUser,
-  AiOutlineSetting,
+  AiOutlineSetting
 } from 'react-icons/ai'
 import { CoinBalance } from '../components/CoinBalance'
-import { ERC20_ADDRESS } from '../constants'
+import { ERC20_ADDRESS, UNIT_NAME } from '../constants'
 
 const ActionIcon = ({
   icon,
@@ -30,7 +30,7 @@ const ActionIcon = ({
   )
 }
 
-const BalanceView = () => {
+const HomeView = () => {
   return (
     <div className="m-2 flex justify-center items-center">
       <div className="mt-8">
@@ -42,7 +42,7 @@ const BalanceView = () => {
           </div>
 
           <div className="flex justify-center">
-            <CoinBalance erc20Address={ERC20_ADDRESS} unit={'demoCoin'} />
+            <CoinBalance erc20Address={ERC20_ADDRESS} unit={UNIT_NAME} />
           </div>
 
           <div className="pt-2 flex justify-center space-x-3">
@@ -87,4 +87,4 @@ const BalanceView = () => {
   )
 }
 
-export default BalanceView
+export default HomeView

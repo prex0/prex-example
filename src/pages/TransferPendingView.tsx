@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import {usePrex} from '@prex0/prex-react'
+import { usePrex } from '@prex0/prex-react'
 import { GetLinkTransferResponse, RequestStatus } from '@prex0/prex-client'
 import Linkify from 'linkify-react'
 import { Link } from 'react-router-dom'
 import { PrimaryButton, LoadingIndicatorDark } from '../components/common'
 import { QRLink } from '../components/QRLink'
 import { Header } from '../components/Header'
-import { RWebShare } from "react-web-share";
+import { RWebShare } from 'react-web-share'
 import { Clipboard } from '../components/common/Clipboard'
+import { UNIT_NAME } from '../constants'
 
 const TransferPendingView = () => {
   const params = new URLSearchParams(window.location.search)
@@ -95,25 +96,26 @@ const TransferPendingView = () => {
       <div className="p-4 flex justify-center items-center">
         <div className="mt-8">
           <div className="text-base space-y-3">
-
-            <div className='flex justify-center'>
+            <div className="flex justify-center">
               {amount ? (
-                <div>{Number(amount)} DemoCoinを送付しています</div>
+                <div>
+                  {Number(amount)} {UNIT_NAME}を送付しています
+                </div>
               ) : (
                 <div>読み込み中です</div>
               )}
             </div>
 
             <div className="p-4 rounded-lg bg-white">
-              <div className='flex justify-center'>
+              <div className="flex justify-center">
                 {recipientLink.length > 0 ? (
-                  <QRLink
-                    url={recipientLink}
-                  />
+                  <QRLink url={recipientLink} />
                 ) : null}
               </div>
-              <div className='flex justify-center text-xs text-center'>
-              こちらの２次元コードを、<br/>相手に読み取ってもらってください。
+              <div className="flex justify-center text-xs text-center">
+                こちらの２次元コードを、
+                <br />
+                相手に読み取ってもらってください。
               </div>
             </div>
 
@@ -133,24 +135,19 @@ const TransferPendingView = () => {
               </div>
             </div>
 
-
             <div className="fixed bottom-10 z-999 left-0 w-full px-8 py-4">
               <div className="text-xs text-red-700">
                 {error ? 'サーバの調子が悪いようです' : null}
               </div>
 
               <div className="flex flex-col justify-between space-y-1">
-                <div className='h-10'>
-                <RWebShare data={{url: recipientLink}}>
-                  <PrimaryButton>
-                    リンクをシェアする
-                  </PrimaryButton>
-                </RWebShare>
+                <div className="h-10">
+                  <RWebShare data={{ url: recipientLink }}>
+                    <PrimaryButton>リンクをシェアする</PrimaryButton>
+                  </RWebShare>
                 </div>
                 <Clipboard value={recipientLink}>
-                  <div>
-                    リンクをコピーする
-                  </div>
+                  <div>リンクをコピーする</div>
                 </Clipboard>
               </div>
             </div>

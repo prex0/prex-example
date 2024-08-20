@@ -1,7 +1,10 @@
 import React, { useCallback } from 'react'
-import {usePrex} from '@prex0/prex-react'
+import { usePrex } from '@prex0/prex-react'
 import { PrimaryButton, SubButton } from './common/Button'
-import { LoadingIndicator, LoadingIndicatorDark } from './common/LoadingIndicator'
+import {
+  LoadingIndicator,
+  LoadingIndicatorDark
+} from './common/LoadingIndicator'
 import { PlatformOS, usePlatformOS } from '../hooks/usePlatformOS'
 import icloudPng from '../assets/onboarding/icloud.png'
 import { AccordionContainer } from './common/Accordion'
@@ -110,7 +113,7 @@ const RegisterWallet = ({ children }: { children: React.ReactNode }) => {
             コインが届いています。
             ウォレットを登録して、コインを受け取りましょう。
           </div>
-          <RegisterWalletInner /> 
+          <RegisterWalletInner />
         </div>
       ) : (
         <RegisterWalletInner />
@@ -123,10 +126,10 @@ const RegisterWalletInner = () => {
   const { error, isPasskeyAvailable, isLoading, createWallet, recoverWallet } =
     usePrex()
 
-    console.log(error)
-
   const onRegister = useCallback(async () => {
+    console.log(1)
     await createWallet()
+    console.log(2)
   }, [createWallet])
 
   const onRecover = useCallback(async () => {
