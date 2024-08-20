@@ -96,7 +96,9 @@ const RegisterWallet = ({ children }: { children: React.ReactNode }) => {
   if (isLoading) {
     return (
       <div className="w-full h-full flex justify-center items-center">
-        <LoadingIndicatorDark />
+        <div className="mt-10">
+          <LoadingIndicatorDark />
+        </div>
       </div>
     )
   }
@@ -141,7 +143,9 @@ const RegisterWalletInner = () => {
   if (isLoading) {
     return (
       <div className="w-full h-full flex justify-center items-center">
-        <LoadingIndicatorDark />
+        <div className="mt-10">
+          <LoadingIndicatorDark />
+        </div>
       </div>
     )
   }

@@ -18,13 +18,11 @@ npm i
 Register with Prex and create an application on the dashboard.
 Copy the environment variables provided by Prex into a .env.local file in the root directory of your project.
 
-
 ### Start Application
 
 ```
 npm start
 ```
-
 
 ## Development
 
@@ -88,5 +86,5 @@ Deploy the contents of the build directory to your chosen hosting service. This 
 
 Before going live, make sure to configure Prex with the following:
 
-* Allowed Origins: Register your application’s URL as an allowed origin in the Prex dashboard to ensure proper communication between your app and Prex.
-* ERC20 Token Address: Add the ERC20 token address to Prex to enable integration with your application. This step is crucial for the application to interact with the specified ERC20 token.
+- Allowed Origins: Register your application’s URL as an allowed origin in the Prex dashboard to ensure proper communication between your app and Prex.
+- ERC20 Token Address: Add the ERC20 token address to Prex to enable integration with your application. This step is crucial for the application to interact with the specified ERC20 token.

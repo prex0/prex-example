@@ -9,8 +9,11 @@ import {
   MAX_PRIORITY_FEE_PER_GAS
 } from './constants.ts'
 import ReactModal from 'react-modal'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 ReactModal.setAppElement('#root')
+
+const queryClient = new QueryClient()
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
@@ -21,7 +24,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       maxFeePerGas={MAX_FEE_PER_GAS}
       maxPriorityFeePerGas={MAX_PRIORITY_FEE_PER_GAS}
     >
-      <App />
+      <QueryClientProvider client={queryClient}>
+        <App />
+      </QueryClientProvider>
     </PrexProvider>
   </React.StrictMode>
 )

@@ -194,20 +194,22 @@ const TransferView = () => {
                 </RWebShare>
               </div>
             ) : (
-              <PrimaryButton
-                disabled={
-                  amount === null ||
-                  amount === 0 ||
-                  amount > Number(balance[ERC20_ADDRESS])
-                }
-                onClick={onTransfer}
-              >
-                {isCreatingMessageLoading ? (
-                  <LoadingIndicator />
-                ) : (
-                  'メッセージを作る'
-                )}
-              </PrimaryButton>
+              <div className="h-10">
+                <PrimaryButton
+                  disabled={
+                    amount === null ||
+                    amount === 0 ||
+                    amount > Number(balance[ERC20_ADDRESS])
+                  }
+                  onClick={onTransfer}
+                >
+                  {isCreatingMessageLoading ? (
+                    <LoadingIndicator />
+                  ) : (
+                    'メッセージを作る'
+                  )}
+                </PrimaryButton>
+              </div>
             )}
           </div>
         </div>

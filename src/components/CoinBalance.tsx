@@ -1,6 +1,5 @@
-import { useEffect } from 'react'
 import { Address } from 'viem'
-import { usePrex } from '@prex0/prex-react'
+import { useBalance } from '@prex0/prex-react'
 import { LoadingIndicatorDark } from './common/LoadingIndicator'
 import { Link } from 'react-router-dom'
 
@@ -11,14 +10,9 @@ export const CoinBalance = ({
   erc20Address: Address
   unit: string
 }) => {
-  const { wallet, balance, loadBalance } = usePrex()
+  const { isLoading, data } = useBalance(erc20Address)
 
-  useEffect(() => {
-    loadBalance(erc20Address)
-  }, [loadBalance, erc20Address])
-
-  const hasZero =
-    balance[erc20Address] === undefined ? false : balance[erc20Address] === 0n
+  const hasZero = isLoading ? false : data === 0n
 
   return (
     <div className="mt-8 w-48 p-4 shadow-lg rounded-xl border-primary border-[1px] bg-white">
@@ -26,9 +20,9 @@ export const CoinBalance = ({
         <div className="text-base text-zinc-700 flex justify-center">
           コイン保有数
         </div>
-        {wallet && balance[erc20Address] !== undefined ? (
+        {!isLoading ? (
           <div className="text-xl font-bold text-zinc-900 flex justify-center">
-            {Number(balance[erc20Address])} {unit}
+            {Number(data)} {unit}
           </div>
         ) : (
           <LoadingIndicatorDark />

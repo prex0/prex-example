@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback } from 'react'
 import { Address, Hex } from 'viem'
 import { usePrex, splitAddress } from '@prex0/prex-react'
 import { GetLinkTransferResponse, RequestStatus } from '@prex0/prex-client'
@@ -10,6 +10,7 @@ import {
   LoadingIndicatorDark
 } from '../components/common'
 import { UNIT_NAME } from '../constants'
+import { useLinkTransfer } from '../hooks/useLinkTransfer'
 
 enum Status {
   NotReceived,
@@ -18,39 +19,84 @@ enum Status {
 }
 
 const ReceiveView = () => {
-  const [status, setStatus] = React.useState<Status>(Status.NotReceived)
   const params = new URLSearchParams(window.location.search)
-  const [message, setMessage] = useState('')
-  const [linkTransfer, setLinkTransfer] =
-    useState<GetLinkTransferResponse | null>(null)
-
-  const [amount, setAmount] = React.useState<bigint | undefined>(undefined)
-  const [isNotFound, setIsNotFound] = React.useState(false)
 
   const id = params.get('id')
   const secret = params.get('s')
 
-  const { nicknames, error, getLinkTransfer, receiveLinkTransfer } = usePrex()
+  if (id === null || secret === null) {
+    return (
+      <div className="mt-20">
+        <LoadingIndicatorDark />
+      </div>
+    )
+  }
+
+  return <ReceiveViewWithParams id={id} secret={secret} />
+}
+
+const ReceiveViewWithParams = ({
+  id,
+  secret
+}: {
+  id: string
+  secret: string
+}) => {
+  const linkTransfer = useLinkTransfer(id, secret)
+
+  if (linkTransfer.isLoading || linkTransfer.data === undefined) {
+    return (
+      <div className="mt-20">
+        <LoadingIndicatorDark />
+      </div>
+    )
+  }
+
+  if (linkTransfer.data === null) {
+    return (
+      <div className="m-2 flex justify-center items-center">
+        <div className="mt-8">
+          <div className="text-base space-y-3">
+            <div>このリンクは見つかりません</div>
+            <div>
+              <Link to="/" className="text-blue-600 underline">
+                ホームに戻る。
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <ReceiveViewWithLinkTransfer
+      id={id}
+      secret={secret}
+      linkTransfer={linkTransfer.data}
+    />
+  )
+}
+
+const ReceiveViewWithLinkTransfer = ({
+  id,
+  secret,
+  linkTransfer
+}: {
+  id: string
+  secret: string
+  linkTransfer: GetLinkTransferResponse
+}) => {
+  const [status, setStatus] = React.useState<Status>(Status.NotReceived)
+
+  const { nicknames, error, receiveLinkTransfer } = usePrex()
+
+  const amount = linkTransfer.request.amount
+  const message = linkTransfer.message.messageBody.message
 
   const getDisplayName = (address: Address) => {
     return nicknames[address] || splitAddress(address)
   }
-
-  useEffect(() => {
-    if (id && secret) {
-      getLinkTransfer(id, secret).then(message => {
-        if (message === null) {
-          setIsNotFound(true)
-          return
-        }
-
-        setLinkTransfer(message)
-        setMessage(message.message.messageBody.message)
-
-        setAmount(message.request.amount)
-      })
-    }
-  }, [id, getLinkTransfer, setLinkTransfer, setAmount])
 
   const onReceive = useCallback(async () => {
     if (!secret) {
@@ -71,23 +117,6 @@ const ReceiveView = () => {
       setStatus(Status.NotReceived)
     }
   }, [setStatus, secret, id, receiveLinkTransfer])
-
-  if (isNotFound) {
-    return (
-      <div className="m-2 flex justify-center items-center">
-        <div className="mt-8">
-          <div className="text-base space-y-3">
-            <div>このリンクは見つかりません</div>
-            <div>
-              <Link to="/" className="text-blue-600 underline">
-                ホームに戻る。
-              </Link>
-            </div>
-          </div>
-        </div>
-      </div>
-    )
-  }
 
   if (linkTransfer === null) {
     return <LoadingIndicatorDark />
@@ -147,18 +176,20 @@ const ReceiveView = () => {
             <div className="text-xs text-red-700">
               {error ? 'サーバの調子が悪いようです' : null}
             </div>
-            <PrimaryButton
-              disabled={status !== Status.NotReceived}
-              onClick={onReceive}
-            >
-              {status === Status.Received ? (
-                '受け取り完了'
-              ) : status === Status.Processing ? (
-                <LoadingIndicator />
-              ) : (
-                '受け取る'
-              )}
-            </PrimaryButton>
+            <div className="h-10">
+              <PrimaryButton
+                disabled={status !== Status.NotReceived}
+                onClick={onReceive}
+              >
+                {status === Status.Received ? (
+                  '受け取り完了'
+                ) : status === Status.Processing ? (
+                  <LoadingIndicator />
+                ) : (
+                  '受け取る'
+                )}
+              </PrimaryButton>
+            </div>
           </div>
         </div>
       </div>
