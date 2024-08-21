@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Address } from 'viem'
 import { usePrex, splitAddress } from '@prex0/prex-react'
 import dayjs from 'dayjs'
@@ -11,6 +11,7 @@ import {
 import { CoinBalance } from '../components/CoinBalance'
 import { ERC20_ADDRESS, TOKEN_NAME, UNIT_NAME } from '../constants'
 import { Header } from '../components/Header'
+import { toErrorMessage } from '../utils/error'
 
 enum Status {
   NotReceived,
@@ -34,6 +35,7 @@ const DirectTransferView = () => {
   const params = new URLSearchParams(window.location.search)
   const [amountText, setAmount] = React.useState<string>('0')
   const amount = getNumber(amountText)
+  const [error, setError] = useState<string | null>(null)
 
   const {
     wallet,
@@ -41,7 +43,6 @@ const DirectTransferView = () => {
     allowance,
     loadBalance,
     nicknames,
-    error,
     transfer,
     approve,
     loadNicknames
@@ -76,15 +77,21 @@ const DirectTransferView = () => {
       try {
         await approve(ERC20_ADDRESS)
       } catch (e) {
-        console.error(e)
+        setError(toErrorMessage(e))
+
         setStatus(Status.NotReceived)
+
         return
       }
     }
 
-    await transfer(ERC20_ADDRESS, recipient as Address, BigInt(amount))
+    try {
+      await transfer(ERC20_ADDRESS, recipient as Address, BigInt(amount))
 
-    setStatus(Status.Received)
+      setStatus(Status.Received)
+    }catch(e) {
+      setError(toErrorMessage(e))
+    }
   }, [transfer, setStatus, amount, recipient])
 
   if (balance[ERC20_ADDRESS] === undefined) {
@@ -204,7 +211,7 @@ const DirectTransferView = () => {
                 </div>
 
                 <div className="text-xs text-red-700">
-                  {error ? 'サーバの調子が悪いようです' : null}
+                  {error}
                   {isAmountZero
                     ? '数量を入力してください'
                     : isExceeded

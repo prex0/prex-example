@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import { Address, Hex } from 'viem'
 import { usePrex, splitAddress } from '@prex0/prex-react'
 import { GetLinkTransferResponse, RequestStatus } from '@prex0/prex-client'
@@ -11,6 +11,7 @@ import {
 } from '../components/common'
 import { UNIT_NAME } from '../constants'
 import { useLinkTransfer } from '../hooks/useLinkTransfer'
+import { toErrorMessage } from '../utils/error'
 
 enum Status {
   NotReceived,
@@ -89,7 +90,8 @@ const ReceiveViewWithLinkTransfer = ({
 }) => {
   const [status, setStatus] = React.useState<Status>(Status.NotReceived)
 
-  const { nicknames, error, receiveLinkTransfer } = usePrex()
+  const { nicknames, receiveLinkTransfer } = usePrex()
+  const [error, setError] = useState<string | null>(null)
 
   const amount = linkTransfer.request.amount
   const message = linkTransfer.message.messageBody.message
@@ -109,11 +111,14 @@ const ReceiveViewWithLinkTransfer = ({
 
     setStatus(Status.Processing)
 
-    if (await receiveLinkTransfer(id, secret as Hex)) {
+    try {
+      receiveLinkTransfer(id, secret as Hex)
+
       setStatus(Status.Received)
 
       window.location.href = '/'
-    } else {
+    }catch(e) {
+      setError(toErrorMessage(e))
       setStatus(Status.NotReceived)
     }
   }, [setStatus, secret, id, receiveLinkTransfer])
@@ -174,7 +179,7 @@ const ReceiveViewWithLinkTransfer = ({
 
           <div className="fixed bottom-10 z-999 left-0 w-full p-2">
             <div className="text-xs text-red-700">
-              {error ? 'サーバの調子が悪いようです' : null}
+              {error}
             </div>
             <div className="h-10">
               <PrimaryButton

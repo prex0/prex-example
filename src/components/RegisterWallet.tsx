@@ -125,18 +125,16 @@ const RegisterWallet = ({ children }: { children: React.ReactNode }) => {
 }
 
 const RegisterWalletInner = () => {
-  const { error, isPasskeyAvailable, isLoading, createWallet, recoverWallet } =
+  const { error, isPasskeyAvailable, isLoading, createWallet, restoreWallet } =
     usePrex()
 
   const onRegister = useCallback(async () => {
-    console.log(1)
     await createWallet()
-    console.log(2)
   }, [createWallet])
 
   const onRecover = useCallback(async () => {
-    await recoverWallet()
-  }, [recoverWallet])
+    await restoreWallet()
+  }, [restoreWallet])
 
   const platformOs = usePlatformOS()
 

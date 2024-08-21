@@ -4,11 +4,11 @@ import { Header } from '../components/Header'
 import { PrimaryButton } from '../components/common'
 
 const SettingsView = () => {
-  const { wallet, recoverWallet } = usePrex()
+  const { wallet, restoreWallet } = usePrex()
 
   const onRecoverWallet = useCallback(() => {
-    recoverWallet()
-  }, [recoverWallet])
+    restoreWallet()
+  }, [restoreWallet])
 
   return (
     <div>

@@ -35,7 +35,8 @@ const TransferView = () => {
 
   const [recipientLink, setRecipientLink] = useState('')
   const [message, setMessage] = useState(`コインをお送りします！`)
-  const { error, approve, transferByLink, loadBalance, allowance, balance } =
+  const [error, setError] = useState<string | null>(null)
+  const { approve, transferByLink, loadBalance, allowance, balance } =
     usePrex()
 
   useEffect(() => {
@@ -54,6 +55,7 @@ const TransferView = () => {
         await approve(ERC20_ADDRESS)
       } catch (e) {
         console.error(e)
+        setError(toErrorMessage(e))
         setIsCreatingMessageLoading(false)
       }
     }
@@ -62,16 +64,16 @@ const TransferView = () => {
     const expiration = getExpiration()
 
     // Call Prex API to lock the amount of tokens in the smart contract
-    const transferResponse = await transferByLink(
-      ERC20_ADDRESS,
-      BigInt(amount),
-      expiration,
-      {
-        message
-      }
-    )
+    try {
+      const transferResponse = await transferByLink(
+        ERC20_ADDRESS,
+        BigInt(amount),
+        expiration,
+        {
+          message
+        }
+      )
 
-    if (transferResponse) {
       const { id, secret } = transferResponse
 
       // Create recipient link
@@ -86,8 +88,10 @@ const TransferView = () => {
       setRecipientLink(_recipientLink)
 
       setIsCreatingMessageLoading(false)
-    } else {
-      setIsCreatingMessageLoading(false)
+    } catch(e) {
+      console.error(e)
+      setError(toErrorMessage(e))
+      setIsCreatingMessageLoading(false)      
     }
   }, [amount, allowance, approve, message, setRecipientLink, transferByLink])
 
@@ -173,7 +177,7 @@ const TransferView = () => {
 
           <div className="fixed bottom-10 z-999 left-0 w-full p-4 space-y-4">
             <div className="text-xs text-red-700">
-              {error ? toErrorMessage(error) : null}
+              {error}
               {amount === null ? '数量が不正です' : null}
               {amount !== null && amount > Number(balance[ERC20_ADDRESS])
                 ? '残高が足りません'
