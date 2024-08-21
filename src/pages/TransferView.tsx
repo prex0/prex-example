@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { usePrex } from '@prex0/prex-react'
+import { useBalance, usePrex } from '@prex0/prex-react'
 import {
   PrimaryButton,
   SubButton,
@@ -36,12 +36,9 @@ const TransferView = () => {
   const [recipientLink, setRecipientLink] = useState('')
   const [message, setMessage] = useState(`コインをお送りします！`)
   const [error, setError] = useState<string | null>(null)
-  const { approve, transferByLink, loadBalance, allowance, balance } =
+  const { approve, transferByLink } =
     usePrex()
-
-  useEffect(() => {
-    loadBalance(ERC20_ADDRESS)
-  }, [loadBalance])
+  const {balance, allowance} = useBalance(ERC20_ADDRESS)
 
   const onTransfer = useCallback(async () => {
     setIsCreatingMessageLoading(true)
@@ -50,7 +47,11 @@ const TransferView = () => {
       throw new Error('amount must not be null')
     }
 
-    if (allowance[ERC20_ADDRESS] < 1000n) {
+    if(allowance === null) {
+      throw new Error('allowance must not be null')
+    }
+
+    if (allowance < 1000n) {
       try {
         await approve(ERC20_ADDRESS)
       } catch (e) {
@@ -95,7 +96,7 @@ const TransferView = () => {
     }
   }, [amount, allowance, approve, message, setRecipientLink, transferByLink])
 
-  if (balance[ERC20_ADDRESS] === undefined) {
+  if (balance === null) {
     return (
       <div className="m-2 flex justify-center items-center">
         <div className="mt-8">
@@ -179,7 +180,7 @@ const TransferView = () => {
             <div className="text-xs text-red-700">
               {error}
               {amount === null ? '数量が不正です' : null}
-              {amount !== null && amount > Number(balance[ERC20_ADDRESS])
+              {amount !== null && amount > Number(balance)
                 ? '残高が足りません'
                 : null}
             </div>
@@ -203,7 +204,7 @@ const TransferView = () => {
                   disabled={
                     amount === null ||
                     amount === 0 ||
-                    amount > Number(balance[ERC20_ADDRESS])
+                    amount > Number(balance)
                   }
                   onClick={onTransfer}
                 >
