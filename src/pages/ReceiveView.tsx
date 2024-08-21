@@ -112,7 +112,7 @@ const ReceiveViewWithLinkTransfer = ({
     setStatus(Status.Processing)
 
     try {
-      receiveLinkTransfer(id, secret as Hex)
+      await receiveLinkTransfer(id, secret as Hex)
 
       setStatus(Status.Received)
 
