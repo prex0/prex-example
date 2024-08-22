@@ -10,6 +10,8 @@ export const TOKEN_NAME = 'DemoCoin'
 // Symbol name
 export const UNIT_NAME = 'demoCoin'
 
+export const TOKEN_DECIMALS = 18
+
 // Expiration time for link validity (24 hours)
 export const TIME_UNTIL_EXPIRATION = 60 * 60 * 24
 

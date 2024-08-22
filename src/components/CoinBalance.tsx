@@ -1,7 +1,8 @@
-import { Address } from 'viem'
+import { Address, formatUnits } from 'viem'
 import { useBalance } from '@prex0/prex-react'
 import { LoadingIndicatorDark } from './common/LoadingIndicator'
 import { Link } from 'react-router-dom'
+import { TOKEN_DECIMALS } from '../constants'
 
 export const CoinBalance = ({
   erc20Address,
@@ -22,7 +23,7 @@ export const CoinBalance = ({
         </div>
         {!isLoading ? (
           <div className="text-xl font-bold text-zinc-900 flex justify-center">
-            {Number(data)} {unit}
+            {formatUnits(data, TOKEN_DECIMALS)} {unit}
           </div>
         ) : (
           <LoadingIndicatorDark />

@@ -22,7 +22,7 @@ const MintView = () => {
 
     setStatus(Status.Processing)
 
-    await mint(wallet.address, 100n)
+    await mint(wallet.address, 10n * 10n ** 18n)
 
     setStatus(Status.Received)
 
@@ -39,7 +39,7 @@ const MintView = () => {
           <div className="text-base space-y-3">
             <div className="text-base font-bold">デモ用コイン配布</div>
             <div>
-              100 Demo Coin
+              10 Demo Coin
               を受け取ることができます。テストネットでのみ利用可能です。
             </div>
 

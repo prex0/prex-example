@@ -8,7 +8,8 @@ import { QRLink } from '../components/QRLink'
 import { Header } from '../components/Header'
 import { RWebShare } from 'react-web-share'
 import { Clipboard } from '../components/common/Clipboard'
-import { UNIT_NAME } from '../constants'
+import { TOKEN_DECIMALS, UNIT_NAME } from '../constants'
+import { formatUnits } from 'viem'
 
 const TransferPendingView = () => {
   const params = new URLSearchParams(window.location.search)
@@ -99,7 +100,8 @@ const TransferPendingView = () => {
             <div className="flex justify-center">
               {amount ? (
                 <div>
-                  {Number(amount)} {UNIT_NAME}を送付しています
+                  {formatUnits(amount, TOKEN_DECIMALS)} {UNIT_NAME}
+                  を送付しています
                 </div>
               ) : (
                 <div>読み込み中です</div>

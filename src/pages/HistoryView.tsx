@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
-import { Address, isAddressEqual } from 'viem'
+import { Address, formatUnits, isAddressEqual } from 'viem'
 import {
   usePrex,
   WalletCoinHistory,
   WalletOnetimeLockHistory
 } from '@prex0/prex-react'
-import { ERC20_ADDRESS, UNIT_NAME } from '../constants'
+import { ERC20_ADDRESS, TOKEN_DECIMALS, UNIT_NAME } from '../constants'
 import { getFormattedDate } from '../utils/date'
 import { LoadingIndicatorDark } from '../components/common'
 import { Header } from '../components/Header'
@@ -24,7 +24,7 @@ const HistoryItemContent = ({
         <div className="flex justify-between">
           <div>{item.recipientDisplayName}に送りました。</div>
           <div>
-            {item.amount} {UNIT_NAME}
+            {formatUnits(BigInt(item.amount), TOKEN_DECIMALS)} {UNIT_NAME}
           </div>
         </div>
         <div className="flex justify-start">
@@ -42,7 +42,7 @@ const HistoryItemContent = ({
         <div className="flex justify-between">
           <div>{item.senderDisplayName}から受け取りました。</div>
           <div>
-            {item.amount} {UNIT_NAME}
+            {formatUnits(BigInt(item.amount), TOKEN_DECIMALS)} {UNIT_NAME}
           </div>
         </div>
         <div className="flex justify-start">
@@ -75,7 +75,7 @@ const OnetimeLockHistoryItemContent = ({
         <div className="flex justify-between">
           <div>{item.recipientDisplayName}に送りました。</div>
           <div>
-            {item.amount} {UNIT_NAME}
+            {formatUnits(BigInt(item.amount), TOKEN_DECIMALS)} {UNIT_NAME}
           </div>
         </div>
         <div className="flex justify-start">
@@ -101,7 +101,7 @@ const OnetimeLockHistoryItemContent = ({
             )}
           </div>
           <div>
-            {item.amount} {UNIT_NAME}
+            {formatUnits(BigInt(item.amount), TOKEN_DECIMALS)} {UNIT_NAME}
           </div>
         </div>
         <div className="flex justify-start">

@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react'
-import { Address, Hex } from 'viem'
+import { Address, formatUnits, Hex } from 'viem'
 import { usePrex, splitAddress } from '@prex0/prex-react'
 import { GetLinkTransferResponse, RequestStatus } from '@prex0/prex-client'
 import Linkify from 'linkify-react'
@@ -9,7 +9,7 @@ import {
   LoadingIndicator,
   LoadingIndicatorDark
 } from '../components/common'
-import { UNIT_NAME } from '../constants'
+import { TOKEN_DECIMALS, UNIT_NAME } from '../constants'
 import { useLinkTransfer } from '../hooks/useLinkTransfer'
 import { toErrorMessage } from '../utils/error'
 
@@ -117,7 +117,7 @@ const ReceiveViewWithLinkTransfer = ({
       setStatus(Status.Received)
 
       window.location.href = '/'
-    }catch(e) {
+    } catch (e) {
       setError(toErrorMessage(e))
       setStatus(Status.NotReceived)
     }
@@ -155,7 +155,7 @@ const ReceiveViewWithLinkTransfer = ({
               {linkTransfer
                 ? getDisplayName(linkTransfer.request.sender) + 'から'
                 : ''}
-              {Number(amount)} {UNIT_NAME} が届いています。
+              {formatUnits(amount, TOKEN_DECIMALS)} {UNIT_NAME} が届いています。
             </div>
           ) : (
             <div>読み込み中です</div>
@@ -178,9 +178,7 @@ const ReceiveViewWithLinkTransfer = ({
           </div>
 
           <div className="fixed bottom-10 z-999 left-0 w-full p-2">
-            <div className="text-xs text-red-700">
-              {error}
-            </div>
+            <div className="text-xs text-red-700">{error}</div>
             <div className="h-10">
               <PrimaryButton
                 disabled={status !== Status.NotReceived}

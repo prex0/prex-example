@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { Address } from 'viem'
+import { Address, parseUnits } from 'viem'
 import { usePrex, splitAddress } from '@prex0/prex-react'
 import dayjs from 'dayjs'
 import {
@@ -9,7 +9,12 @@ import {
   SubTitle
 } from '../components/common'
 import { CoinBalance } from '../components/CoinBalance'
-import { ERC20_ADDRESS, TOKEN_NAME, UNIT_NAME } from '../constants'
+import {
+  ERC20_ADDRESS,
+  TOKEN_DECIMALS,
+  TOKEN_NAME,
+  UNIT_NAME
+} from '../constants'
 import { Header } from '../components/Header'
 import { toErrorMessage } from '../utils/error'
 
@@ -86,10 +91,14 @@ const DirectTransferView = () => {
     }
 
     try {
-      await transfer(ERC20_ADDRESS, recipient as Address, BigInt(amount))
+      await transfer(
+        ERC20_ADDRESS,
+        recipient as Address,
+        parseUnits(amount.toString(), TOKEN_DECIMALS)
+      )
 
       setStatus(Status.Received)
-    }catch(e) {
+    } catch (e) {
       setError(toErrorMessage(e))
     }
   }, [transfer, setStatus, amount, recipient])
@@ -105,7 +114,9 @@ const DirectTransferView = () => {
   }
 
   const isAmountZero = amount === null || amount === 0
-  const isExceeded = isAmountZero || amount > Number(balance[ERC20_ADDRESS])
+  const isExceeded =
+    isAmountZero ||
+    parseUnits(amount.toString(), TOKEN_DECIMALS) > balance[ERC20_ADDRESS]
 
   const now = dayjs()
 

@@ -7,12 +7,13 @@ import {
 } from '../components/common'
 import { TextInput } from '../components/common/TextInput'
 import { CoinBalance } from '../components/CoinBalance'
-import { ERC20_ADDRESS, UNIT_NAME } from '../constants'
+import { ERC20_ADDRESS, TOKEN_DECIMALS, UNIT_NAME } from '../constants'
 import { Header } from '../components/Header'
 import { QRModal } from '../components/QRModal'
 import { toErrorMessage } from '../utils/error'
 import { RWebShare } from 'react-web-share'
 import { getExpiration } from '../utils'
+import { parseUnits } from 'viem'
 
 function getNumber(text: string) {
   const num = parseInt(text)
@@ -36,9 +37,8 @@ const TransferView = () => {
   const [recipientLink, setRecipientLink] = useState('')
   const [message, setMessage] = useState(`コインをお送りします！`)
   const [error, setError] = useState<string | null>(null)
-  const { approve, transferByLink } =
-    usePrex()
-  const {balance, allowance} = useBalance(ERC20_ADDRESS)
+  const { approve, transferByLink } = usePrex()
+  const { balance, allowance } = useBalance(ERC20_ADDRESS)
 
   const onTransfer = useCallback(async () => {
     setIsCreatingMessageLoading(true)
@@ -47,7 +47,7 @@ const TransferView = () => {
       throw new Error('amount must not be null')
     }
 
-    if(allowance === null) {
+    if (allowance === null) {
       throw new Error('allowance must not be null')
     }
 
@@ -68,7 +68,7 @@ const TransferView = () => {
     try {
       const transferResponse = await transferByLink(
         ERC20_ADDRESS,
-        BigInt(amount),
+        parseUnits(amount.toString(), TOKEN_DECIMALS),
         expiration,
         {
           message
@@ -89,10 +89,10 @@ const TransferView = () => {
       setRecipientLink(_recipientLink)
 
       setIsCreatingMessageLoading(false)
-    } catch(e) {
+    } catch (e) {
       console.error(e)
       setError(toErrorMessage(e))
-      setIsCreatingMessageLoading(false)      
+      setIsCreatingMessageLoading(false)
     }
   }, [amount, allowance, approve, message, setRecipientLink, transferByLink])
 
@@ -180,7 +180,8 @@ const TransferView = () => {
             <div className="text-xs text-red-700">
               {error}
               {amount === null ? '数量が不正です' : null}
-              {amount !== null && amount > Number(balance)
+              {amount !== null &&
+              parseUnits(amount.toString(), TOKEN_DECIMALS) > balance
                 ? '残高が足りません'
                 : null}
             </div>
@@ -204,7 +205,7 @@ const TransferView = () => {
                   disabled={
                     amount === null ||
                     amount === 0 ||
-                    amount > Number(balance)
+                    parseUnits(amount.toString(), TOKEN_DECIMALS) > balance
                   }
                   onClick={onTransfer}
                 >
