@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react'
 import { Address, formatUnits, isAddressEqual } from 'viem'
 import {
   usePrex,
-  WalletCoinHistory,
-  WalletOnetimeLockHistory
+  TransferHistory,
+  LinkTransferHistory
 } from '@prex0/prex-react'
 import { ERC20_ADDRESS, TOKEN_DECIMALS, UNIT_NAME } from '../constants'
 import { getFormattedDate } from '../utils/date'
@@ -16,7 +16,7 @@ const HistoryItemContent = ({
   me
 }: {
   me: Address
-  item: WalletCoinHistory
+  item: TransferHistory
 }) => {
   if (isAddressEqual(item.sender, me)) {
     return (
@@ -57,10 +57,10 @@ const HistoryItemContent = ({
   }
 }
 
-const OnetimeLockHistoryItemContent = ({
+const LinkTransferHistoryItemContent = ({
   item
 }: {
-  item: WalletOnetimeLockHistory
+  item: LinkTransferHistory
 }) => {
   const recipientLink =
     item.secret && item.messageId
@@ -152,18 +152,18 @@ const HistoryContent = ({ me }: { me: Address }) => {
   )
 }
 
-const OnetimeLockHistoryContent = () => {
-  const { onetimeLockHistory } = usePrex()
+const LinkTransferLockHistoryContent = () => {
+  const { linkTransferHistory } = usePrex()
 
-  if (onetimeLockHistory === null) {
+  if (linkTransferHistory === null) {
     return <LoadingIndicatorDark />
   }
 
   return (
     <div className="space-y-4">
-      {onetimeLockHistory.map((item, index) => (
+      {linkTransferHistory.map((item, index) => (
         <div key={index} className="p-2 bg-white shadow">
-          <OnetimeLockHistoryItemContent item={item} />
+          <LinkTransferHistoryItemContent item={item} />
         </div>
       ))}
     </div>
@@ -171,12 +171,12 @@ const OnetimeLockHistoryContent = () => {
 }
 
 const HistoryView = () => {
-  const { wallet, loadHistory, loadOnetimeLockHistory } = usePrex()
+  const { wallet, loadHistory, loadLinkTransferHistory } = usePrex()
 
   const [tab, setTab] = useState<'history' | 'onetime'>('history')
 
   useEffect(() => {
-    if (tab === 'onetime') loadOnetimeLockHistory(ERC20_ADDRESS)
+    if (tab === 'onetime') loadLinkTransferHistory(ERC20_ADDRESS)
     else loadHistory(ERC20_ADDRESS)
   }, [tab])
 
@@ -214,7 +214,7 @@ const HistoryView = () => {
               tab === 'history' ? (
                 <HistoryContent me={wallet.address} />
               ) : (
-                <OnetimeLockHistoryContent />
+                <LinkTransferLockHistoryContent />
               )
             ) : (
               <LoadingIndicatorDark />
