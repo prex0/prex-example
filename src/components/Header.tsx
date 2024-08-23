@@ -1,4 +1,4 @@
-import { ReturnButton } from './transfer/ReturnButton'
+import { ReturnButton } from './ReturnButton'
 
 export const Header = ({
   title,

@@ -2,12 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { Address, parseUnits } from 'viem'
 import { usePrex, splitAddress } from '@prex0/prex-react'
 import dayjs from 'dayjs'
-import {
-  PrimaryButton,
-  SubButton,
-  LoadingIndicator,
-  SubTitle
-} from '../components/common'
+import { PrimaryButton, LoadingIndicator, SubTitle } from '../components/common'
 import { CoinBalance } from '../components/CoinBalance'
 import {
   ERC20_ADDRESS,
@@ -17,29 +12,19 @@ import {
 } from '../constants'
 import { Header } from '../components/Header'
 import { toErrorMessage } from '../utils/error'
+import { AmountForm } from '../components/AmountForm'
 
 enum Status {
-  NotReceived,
+  NotTransferred,
   Processing,
-  Received
+  Transferred
 }
 
-function getNumber(text: string) {
-  const num = parseInt(text)
-
-  if (!Number.isNaN(num)) {
-    return num
-  } else {
-    return null
-  }
-}
-
-const DirectTransferView = () => {
-  const [status, setStatus] = React.useState<Status>(Status.NotReceived)
+const DirectTransferViewInner = () => {
+  const [status, setStatus] = React.useState<Status>(Status.NotTransferred)
 
   const params = new URLSearchParams(window.location.search)
-  const [amountText, setAmount] = React.useState<string>('0')
-  const amount = getNumber(amountText)
+  const [amount, setAmount] = React.useState<number | null>(0)
   const [error, setError] = useState<string | null>(null)
 
   const {
@@ -84,7 +69,7 @@ const DirectTransferView = () => {
       } catch (e) {
         setError(toErrorMessage(e))
 
-        setStatus(Status.NotReceived)
+        setStatus(Status.NotTransferred)
 
         return
       }
@@ -97,7 +82,7 @@ const DirectTransferView = () => {
         parseUnits(amount.toString(), TOKEN_DECIMALS)
       )
 
-      setStatus(Status.Received)
+      setStatus(Status.Transferred)
     } catch (e) {
       setError(toErrorMessage(e))
     }
@@ -120,39 +105,46 @@ const DirectTransferView = () => {
 
   const now = dayjs()
 
-  if (status === Status.Received) {
+  if (recipient === null) {
     return (
-      <div>
-        <Header title="送付" />
-        <div className="m-2 flex justify-center items-center">
-          <div className="mt-12">
-            <div className="text-base space-y-4">
-              <div className="flex justify-center">
-                <div className="text-center text-base">
-                  {recipient
-                    ? nicknames[recipient]
-                      ? nicknames[recipient]
-                      : splitAddress(recipient)
-                    : '...'}
-                </div>
-              </div>
+      <div className="mt-8">
+        <div className="text-base space-y-3">
+          <div>
+            <div className="flex justify-center">
+              <SubTitle>送付先が不明です。</SubTitle>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
-              <div className="flex justify-center">
-                <div className="text-center text-base">
-                  {now.format('YYYY年MM月DD日 HH時mm分ss秒')}
-                </div>
-              </div>
+  const recipientName = nicknames[recipient]
+    ? nicknames[recipient]
+    : splitAddress(recipient)
 
-              <div className="flex justify-center">
-                <div className="text-center text-2xl font-bold">
-                  1 {UNIT_NAME}
-                </div>
-              </div>
-              <div className="flex justify-center">
-                <div className="w-40 p-2 rounded-2xl bg-green-700 text-white text-center text-base font-bold">
-                  送付完了
-                </div>
-              </div>
+  if (status === Status.Transferred) {
+    return (
+      <div className="mt-12">
+        <div className="text-base space-y-4">
+          <div className="flex justify-center">
+            <div className="text-center text-base">{recipientName}</div>
+          </div>
+
+          <div className="flex justify-center">
+            <div className="text-center text-base">
+              {now.format('YYYY年MM月DD日 HH時mm分ss秒')}
+            </div>
+          </div>
+
+          <div className="flex justify-center">
+            <div className="text-center text-2xl font-bold">
+              {amount} {UNIT_NAME}
+            </div>
+          </div>
+          <div className="flex justify-center">
+            <div className="w-40 p-2 rounded-2xl bg-green-700 text-white text-center text-base font-bold">
+              送付完了
             </div>
           </div>
         </div>
@@ -161,89 +153,55 @@ const DirectTransferView = () => {
   }
 
   return (
+    <div className="mt-8">
+      <div className="text-base space-y-3">
+        <div>
+          <div className="flex justify-center">
+            <SubTitle>送付先：{recipientName}</SubTitle>
+          </div>
+
+          <div className="flex justify-center">
+            <div className="text-center">{TOKEN_NAME}を送付します。</div>
+          </div>
+        </div>
+
+        <div className="flex justify-center">
+          <CoinBalance erc20Address={ERC20_ADDRESS} unit={UNIT_NAME} />
+        </div>
+
+        <div className="fixed bottom-10 z-999 left-0 w-full p-2">
+          <div className="space-y-3">
+            <div className="mt-8 text-zinc-700">送る枚数を決めてください。</div>
+            <AmountForm symbol={UNIT_NAME} setAmount={setAmount} />
+
+            <div className="text-xs text-red-700">
+              {error}
+              {isAmountZero
+                ? '数量を入力してください'
+                : isExceeded
+                  ? '残高が足りません'
+                  : null}
+            </div>
+
+            <PrimaryButton
+              disabled={isExceeded || status !== Status.NotTransferred}
+              onClick={onReceive}
+            >
+              {status === Status.Processing ? <LoadingIndicator /> : '送付する'}
+            </PrimaryButton>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+const DirectTransferView = () => {
+  return (
     <div>
       <Header title="送付" />
       <div className="m-2 flex justify-center items-center">
-        <div className="mt-8">
-          <div className="text-base space-y-3">
-            <div>
-              <div className="flex justify-center">
-                <SubTitle>{TOKEN_NAME}を送付します。</SubTitle>
-              </div>
-            </div>
-            <CoinBalance erc20Address={ERC20_ADDRESS} unit={UNIT_NAME} />
-
-            <div className="fixed bottom-10 z-999 left-0 w-full p-2">
-              <div className="space-y-3">
-                <div className="p-2 shadow text-base text-zinc-950 flex justify-center w-full bg-transparent rounded-lg border border-zinc-950/10">
-                  <span className="text-black whitespace-nowrap">送る量</span>
-
-                  <div className="w-full md:w-7/8">
-                    <input
-                      className="w-full h-full bg-transparent text-right pr-3"
-                      type="number"
-                      value={amountText}
-                      onChange={e => setAmount(e.target.value)}
-                    />
-                  </div>
-
-                  <span className="text-black">{UNIT_NAME}</span>
-                </div>
-
-                <div className="flex justify-between space-x-1 text-sm">
-                  <SubButton
-                    onClick={() => {
-                      setAmount('1')
-                    }}
-                  >
-                    1
-                  </SubButton>
-                  <SubButton
-                    onClick={() => {
-                      setAmount('2')
-                    }}
-                  >
-                    2
-                  </SubButton>
-                  <SubButton
-                    onClick={() => {
-                      setAmount('3')
-                    }}
-                  >
-                    3
-                  </SubButton>
-                  <SubButton
-                    onClick={() => {
-                      setAmount('4')
-                    }}
-                  >
-                    4
-                  </SubButton>
-                </div>
-
-                <div className="text-xs text-red-700">
-                  {error}
-                  {isAmountZero
-                    ? '数量を入力してください'
-                    : isExceeded
-                      ? '残高が足りません'
-                      : null}
-                </div>
-
-                <PrimaryButton
-                  disabled={isExceeded || status !== Status.NotReceived}
-                  onClick={onReceive}
-                >
-                  {status === Status.Processing ? (
-                    <LoadingIndicator />
-                  ) : (
-                    '送付する'
-                  )}
-                </PrimaryButton>
-              </div>
-            </div>
-          </div>
-        </div>
+        <DirectTransferViewInner />
       </div>
     </div>
   )

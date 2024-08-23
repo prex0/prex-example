@@ -1,10 +1,6 @@
 import React, { useCallback, useState } from 'react'
 import { useBalance, usePrex } from '@prex0/prex-react'
-import {
-  PrimaryButton,
-  SubButton,
-  LoadingIndicator
-} from '../components/common'
+import { PrimaryButton, LoadingIndicator } from '../components/common'
 import { TextInput } from '../components/common/TextInput'
 import { CoinBalance } from '../components/CoinBalance'
 import { ERC20_ADDRESS, TOKEN_DECIMALS, UNIT_NAME } from '../constants'
@@ -14,20 +10,10 @@ import { toErrorMessage } from '../utils/error'
 import { RWebShare } from 'react-web-share'
 import { getExpiration } from '../utils'
 import { parseUnits } from 'viem'
-
-function getNumber(text: string) {
-  const num = parseInt(text)
-
-  if (!Number.isNaN(num)) {
-    return num
-  } else {
-    return null
-  }
-}
+import { AmountForm } from '../components/AmountForm'
 
 const TransferView = () => {
-  const [amountText, setAmount] = React.useState('0')
-  const amount = getNumber(amountText)
+  const [amount, setAmount] = React.useState<number | null>(0)
 
   const [isQROpen, setIsQROpen] = React.useState(false)
 
@@ -120,40 +106,7 @@ const TransferView = () => {
               <div className="mt-8 text-zinc-700">
                 送る枚数を決めてください。
               </div>
-              <div className="flex justify-between items-center space-x-2 text-sm">
-                <div className="basis-1/4">
-                  <SubButton
-                    onClick={() => {
-                      setAmount('1')
-                    }}
-                  >
-                    1
-                  </SubButton>
-                </div>
-                <div className="basis-1/4">
-                  <SubButton
-                    onClick={() => {
-                      setAmount('2')
-                    }}
-                  >
-                    2
-                  </SubButton>
-                </div>
-                <div className="basis-2/4">
-                  <div className="p-2 shadow text-base text-zinc-950 flex justify-center items-center w-full bg-transparent h-10 rounded-lg border border-zinc-950/10">
-                    <div className="w-full h-full">
-                      <input
-                        className="w-full h-full bg-transparent text-right pr-3"
-                        type="number"
-                        value={amountText}
-                        onChange={e => setAmount(e.target.value)}
-                      />
-                    </div>
-
-                    <span className="text-black">{UNIT_NAME}</span>
-                  </div>
-                </div>
-              </div>
+              <AmountForm symbol={UNIT_NAME} setAmount={setAmount} />
             </div>
 
             <div className="space-y-2">
