@@ -69,11 +69,37 @@ const OnetimeLockHistoryItemContent = ({
         )}&s=${encodeURIComponent(item.secret)}`
       : undefined
 
-  if (item.recipient && item.recipientDisplayName) {
+  if (item.status === 'CANCELLED') {
     return (
       <div>
         <div className="flex justify-between">
-          <div>{item.recipientDisplayName}に送りました。</div>
+          <div>キャンセルされました</div>
+          <div>
+            {formatUnits(BigInt(item.amount), TOKEN_DECIMALS)} {UNIT_NAME}
+          </div>
+        </div>
+        <div className="flex justify-start">
+          <div>
+            <div className="text-xs text-zinc-500">
+              {getFormattedDate(item.createdAt)}
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  } else if (item.status === 'LIVE') {
+    return (
+      <div>
+        <div className="flex justify-between">
+          <div>
+            {recipientLink ? (
+              <Link to={recipientLink} className="text-blue-700 underline">
+                送付しています
+              </Link>
+            ) : (
+              '送付しています'
+            )}
+          </div>
           <div>
             {formatUnits(BigInt(item.amount), TOKEN_DECIMALS)} {UNIT_NAME}
           </div>
@@ -91,15 +117,7 @@ const OnetimeLockHistoryItemContent = ({
     return (
       <div>
         <div className="flex justify-between">
-          <div>
-            {recipientLink ? (
-              <Link to={recipientLink} className="text-blue-700 underline">
-                送付しています
-              </Link>
-            ) : (
-              '送付しています'
-            )}
-          </div>
+          <div>{item.recipientDisplayName}に送りました。</div>
           <div>
             {formatUnits(BigInt(item.amount), TOKEN_DECIMALS)} {UNIT_NAME}
           </div>
