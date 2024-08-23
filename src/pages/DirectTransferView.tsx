@@ -52,7 +52,7 @@ const DirectTransferViewInner = () => {
     }
   }, [wallet])
 
-  const onReceive = useCallback(async () => {
+  const onTransferClicked = useCallback(async () => {
     if (!recipient) {
       throw new Error('Invalid request')
     }
@@ -185,7 +185,7 @@ const DirectTransferViewInner = () => {
 
             <PrimaryButton
               disabled={isExceeded || status !== Status.NotTransferred}
-              onClick={onReceive}
+              onClick={onTransferClicked}
             >
               {status === Status.Processing ? <LoadingIndicator /> : '送付する'}
             </PrimaryButton>
