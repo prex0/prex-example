@@ -29,8 +29,8 @@ const DirectTransferViewInner = () => {
 
   const {
     wallet,
-    balance,
-    allowance,
+    balanceMap,
+    allowanceMap,
     loadBalance,
     nicknames,
     transfer,
@@ -63,7 +63,7 @@ const DirectTransferViewInner = () => {
 
     setStatus(Status.Processing)
 
-    if (allowance[ERC20_ADDRESS] < 1000n) {
+    if (allowanceMap[ERC20_ADDRESS] < 1000n) {
       try {
         await approve(ERC20_ADDRESS)
       } catch (e) {
@@ -88,7 +88,7 @@ const DirectTransferViewInner = () => {
     }
   }, [transfer, setStatus, amount, recipient])
 
-  if (balance[ERC20_ADDRESS] === undefined) {
+  if (balanceMap[ERC20_ADDRESS] === undefined) {
     return (
       <div className="m-2 flex justify-center items-center">
         <div className="mt-8">
@@ -101,7 +101,7 @@ const DirectTransferViewInner = () => {
   const isAmountZero = amount === null || amount === 0
   const isExceeded =
     isAmountZero ||
-    parseUnits(amount.toString(), TOKEN_DECIMALS) > balance[ERC20_ADDRESS]
+    parseUnits(amount.toString(), TOKEN_DECIMALS) > balanceMap[ERC20_ADDRESS]
 
   const now = dayjs()
 
