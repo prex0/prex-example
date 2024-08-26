@@ -10,6 +10,8 @@ enum Status {
   Received
 }
 
+const DEFAULT_MINT_AMOUNT = 10n * (10n ** 18n)
+
 const MintView = () => {
   const [status, setStatus] = React.useState<Status>(Status.NotReceived)
   const { wallet, mint } = usePrex()
@@ -22,7 +24,10 @@ const MintView = () => {
 
     setStatus(Status.Processing)
 
-    await mint(wallet.address, 10n * 10n ** 18n)
+    await mint({
+      recipient: wallet.address,
+      amount: DEFAULT_MINT_AMOUNT,
+    })
 
     setStatus(Status.Received)
 
