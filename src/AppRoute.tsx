@@ -6,6 +6,7 @@ import {
 import { Layout } from './pages/Layout'
 import HomeView from './pages/HomeView'
 import MintView from './pages/MintView'
+import GraphView from './pages/GraphView'
 import TransferView from './pages/TransferView'
 import TransferPendingView from './pages/TransferPendingView'
 import ReceiveView from './pages/ReceiveView'
@@ -25,6 +26,8 @@ export const appRoute = createBrowserRouter(
     <Route path="/" element={<Layout />}>
       <Route path="/" element={<HomeView />} />
       <Route path="/mint" element={<MintView />} />
+      <Route path="/graph" element={<GraphView />} />
+
       <Route path="/transfer" element={<TransferView />} />
       <Route path="/pending" element={<TransferPendingView />} />
       <Route path="/receive" element={<ReceiveView />} />

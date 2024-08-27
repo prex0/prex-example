@@ -5,11 +5,13 @@ import { LoadingIndicatorDark } from '../components/common'
 import { ERC20_ADDRESS } from '../constants'
 
 function GraphView() {
-  const { allHistory, loadAllHistory } = usePrex()
+  const { allHistory, loadAllHistory } = usePrex();
 
   useEffect(() => {
-    loadAllHistory(ERC20_ADDRESS)
-  }, [loadAllHistory])
+    loadAllHistory(ERC20_ADDRESS, { limit: 100, offset: 0 });
+  }, [loadAllHistory]);
+
+  console.log(allHistory);
 
   const elements = useMemo(() => {
     if (allHistory === null) {

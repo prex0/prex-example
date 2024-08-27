@@ -19,7 +19,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <PrexProvider
       chainId={CHAIN_ID}
-      policyId={Number(import.meta.env.VITE_POLICY_ID)}
+      policyId={import.meta.env.VITE_POLICY_ID}
       apiKey={import.meta.env.VITE_API_KEY}
       maxFeePerGas={MAX_FEE_PER_GAS}
       maxPriorityFeePerGas={MAX_PRIORITY_FEE_PER_GAS}
