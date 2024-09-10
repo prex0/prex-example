@@ -11,6 +11,7 @@ import { RWebShare } from 'react-web-share'
 import { getExpiration } from '../utils'
 import { parseUnits } from 'viem'
 import { AmountForm } from '../components/AmountForm'
+import { Container } from '../components/ui/Container'
 
 const TransferView = () => {
   const [amount, setAmount] = React.useState<number | null>(0)
@@ -95,7 +96,7 @@ const TransferView = () => {
   return (
     <div>
       <Header title="リンク送金" />
-      <div className="p-4 flex justify-center items-center">
+      <Container>
         <div className="text-base space-y-3">
           <div className="flex justify-center">
             <CoinBalance erc20Address={ERC20_ADDRESS} unit={UNIT_NAME} />
@@ -172,7 +173,7 @@ const TransferView = () => {
             )}
           </div>
         </div>
-      </div>
+      </Container>
     </div>
   )
 }

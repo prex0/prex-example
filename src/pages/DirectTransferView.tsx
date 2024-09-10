@@ -13,6 +13,7 @@ import {
 import { Header } from '../components/Header'
 import { toErrorMessage } from '../utils/error'
 import { AmountForm } from '../components/AmountForm'
+import { Container } from '../components/ui/Container'
 
 enum Status {
   NotTransferred,
@@ -200,9 +201,9 @@ const DirectTransferView = () => {
   return (
     <div>
       <Header title="送付" />
-      <div className="m-2 flex justify-center items-center">
+      <Container>
         <DirectTransferViewInner />
-      </div>
+      </Container>
     </div>
   )
 }

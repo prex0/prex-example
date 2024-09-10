@@ -2,6 +2,8 @@ import { useCallback } from 'react'
 import { usePrex } from '@prex0/prex-react'
 import { Header } from '../components/Header'
 import { PrimaryButton } from '../components/common'
+import { Container } from '../components/ui/Container'
+
 
 const SettingsView = () => {
   const { wallet, restoreWallet } = usePrex()
@@ -13,7 +15,7 @@ const SettingsView = () => {
   return (
     <div>
       <Header title="設定" />
-      <div className="w-full h-full">
+      <Container>
         <div className="mt-14 mx-4 text-sm space-y-3 text-zinc-800">
           <div>
             <div>現在のアドレス：</div>
@@ -30,7 +32,7 @@ const SettingsView = () => {
             ウォレットを切り替える
           </PrimaryButton>
         </div>
-      </div>
+      </Container>
     </div>
   )
 }

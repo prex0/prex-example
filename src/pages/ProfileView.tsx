@@ -6,6 +6,7 @@ import {
   PrimaryButton
 } from '../components/common'
 import { Header } from '../components/Header'
+import { Container } from '../components/ui/Container'
 
 const MAX_NICKNAME_LENGTH = 32
 
@@ -17,7 +18,7 @@ const ProfileView = () => {
   return (
     <div>
       <Header title="プロフィール" />
-      <div className="m-2 flex justify-center items-center">
+      <Container>
         <div className="text-base space-y-3">
           <div className="fixed bottom-8 z-999 left-0 w-full p-2">
             {wallet ? (
@@ -27,7 +28,7 @@ const ProfileView = () => {
             )}
           </div>
         </div>
-      </div>
+      </Container>
     </div>
   )
 }
