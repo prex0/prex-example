@@ -2,7 +2,6 @@ import React, { useCallback, useState } from 'react'
 import { Address, formatUnits, Hex } from 'viem'
 import { usePrex, splitAddress } from '@prex0/prex-react'
 import { GetLinkTransferResponse, RequestStatus } from '@prex0/prex-client'
-import Linkify from 'linkify-react'
 import { Link } from 'react-router-dom'
 import {
   PrimaryButton,
@@ -43,7 +42,7 @@ const ReceiveViewWithParams = ({
   id: string
   secret: string
 }) => {
-  const linkTransfer = useLinkTransfer(id, secret)
+  const linkTransfer = useLinkTransfer(id)
 
   if (linkTransfer.isLoading || linkTransfer.data === undefined) {
     return (
@@ -94,7 +93,6 @@ const ReceiveViewWithLinkTransfer = ({
   const [error, setError] = useState<string | null>(null)
 
   const amount = linkTransfer.request.amount
-  const message = linkTransfer.message.messageBody.message
 
   const getDisplayName = (address: Address) => {
     return nicknames[address] || splitAddress(address)
@@ -160,22 +158,6 @@ const ReceiveViewWithLinkTransfer = ({
           ) : (
             <div>読み込み中です</div>
           )}
-
-          <div className="flex justify-center">
-            <div className="mt-8 ">
-              <div className="text-sm text-gray">メッセージ</div>
-              <div className="text-base text-black">
-                <Linkify
-                  as="p"
-                  options={{
-                    className: 'text-blue-500 underline'
-                  }}
-                >
-                  {message}
-                </Linkify>
-              </div>
-            </div>
-          </div>
 
           <div className="fixed bottom-10 z-999 left-0 w-full p-2">
             <div className="text-xs text-red-700">{error}</div>

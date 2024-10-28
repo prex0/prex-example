@@ -4,7 +4,6 @@ import { Header } from '../components/Header'
 import { PrimaryButton } from '../components/common'
 import { Container } from '../components/ui/Container'
 
-
 const SettingsView = () => {
   const { wallet, restoreWallet } = usePrex()
 

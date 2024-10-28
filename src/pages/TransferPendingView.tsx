@@ -36,8 +36,8 @@ const TransferPendingView = () => {
       : ''
 
   useEffect(() => {
-    if (id && secret) {
-      getLinkTransfer(id, secret).then(message => {
+    if (id) {
+      getLinkTransfer(id).then(message => {
         if (message === null) {
           setIsNotFound(true)
           return
